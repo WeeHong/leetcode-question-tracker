@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "5qzKlFWQlYSOVvEmI7NrRYQK7IUcaUAsKIo/7Jk/u753HHWekaIGe6u27/82KSkaD0MuaSX1P8KfZwV2V7n36w==",
+  "success": true,
+  "projectFilePath": "/root/workspace/dotnet/DataExporter/DataExporter.csproj",
+  "expectedPackageFiles": [
+    "/root/.nuget/packages/csvhelper/27.2.1/csvhelper.27.2.1.nupkg.sha512",
+    "/root/.nuget/packages/npgsql/6.0.3/npgsql.6.0.3.nupkg.sha512",
+    "/root/.nuget/packages/system.runtime.compilerservices.unsafe/6.0.0/system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
