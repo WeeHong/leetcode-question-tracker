@@ -3,7 +3,7 @@ The purpose of the application is to export the LeetCode Question from the datab
 
 ## Getting Started
 1. Create a dotnet user secret
-    - ```
+    ```
     dotnet user-secrets init
     dotnet user-secrets set "NotionDatabase" "<NotionDatabaseId>"
     dotnet user-secrets set "NotionVersion" "<NotionVersion>"
