@@ -11,5 +11,5 @@ public class Name
     public string? Type { get; set; }
 
     [JsonProperty(PropertyName = "title")]
-    public List<Title>? Title { get; set; }
+    public List<Title> Title { get; set; } = new();
 }

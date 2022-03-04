@@ -1,6 +1,7 @@
 using System.Net.Http.Headers;
 using System.Text;
 using DataExporter.Models.Notion;
+using DataExporter.Models.Todoist;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Npgsql;
@@ -138,5 +139,45 @@ public class Notion
             Console.WriteLine($"Question #{reader.GetInt32(0)} insert succesfully.");
         }
         return await Task.FromResult(isSuccess);
+    }
+
+    public async Task<List<Result>> FetchToReviseRecord()
+    {
+        var andCondition = new List<And>() {
+            new And() {
+                Property = "Date Completion",
+                Date = new Date() {
+                    IsNotEmpty = true
+                }
+            },
+            new And() {
+                Property = "Progress",
+                Select = new Select() {
+                    SelectEquals = "To Revise"
+                }
+            }
+        };
+
+        var filter = new FilterRequest()
+        {
+            Filter = new()
+            {
+                And = andCondition
+            }
+        };
+
+        var filterUri = new Uri($"https://api.notion.com/v1/databases/{_database}/query");
+        var json = JsonConvert.SerializeObject(filter);
+        var payload = new StringContent(json, Encoding.UTF8, "application/json");
+        var response = httpClient.PostAsync(filterUri, payload);
+
+        var resultToString = await response.Result.Content.ReadAsStringAsync();
+        var tasks = JsonConvert.DeserializeObject<FilterResponse>(resultToString);
+
+        if (tasks is not null
+            && tasks.Results is not null)
+            return tasks.Results;
+
+        return new();
     }
 }

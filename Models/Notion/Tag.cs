@@ -2,7 +2,7 @@ using Newtonsoft.Json;
 
 namespace DataExporter.Models.Notion;
 
-public class Tag
+public partial class Tag
 {
     [JsonProperty(PropertyName = "type")]
     public string? Type { get; set; }

@@ -2,13 +2,13 @@ using Newtonsoft.Json;
 
 namespace DataExporter.Models.Notion;
 
-public class Title
+public partial class Title
 {
     [JsonProperty(PropertyName = "type")]
     public string? Type { get; set; }
 
     [JsonProperty(PropertyName = "text")]
-    public Text? Text { get; set; }
+    public Text Text { get; set; } = new Text();
 
     [JsonProperty(PropertyName = "annotations")]
     public Annotations? Annotations { get; set; }
