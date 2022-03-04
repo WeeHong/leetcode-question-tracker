@@ -1,7 +1,0 @@
-/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/win10-x64/publish/DataExporter.exe
-/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/win10-x64/publish/DataExporter.dll
-/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/win10-x64/publish/DataExporter.deps.json
-/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/win10-x64/publish/DataExporter.runtimeconfig.json
-/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/win10-x64/publish/DataExporter.pdb
-/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/win10-x64/publish/CsvHelper.dll
-/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/win10-x64/publish/Npgsql.dll
