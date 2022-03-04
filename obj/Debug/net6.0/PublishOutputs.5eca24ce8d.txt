@@ -1,0 +1,7 @@
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/publish/DataExporter
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/publish/DataExporter.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/publish/DataExporter.deps.json
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/publish/DataExporter.runtimeconfig.json
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/publish/DataExporter.pdb
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/publish/CsvHelper.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/publish/Npgsql.dll
