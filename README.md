@@ -3,7 +3,7 @@ The purpose of the application is to export the LeetCode Question from the datab
 
 ## Pre-requisite
 You need to have a local database which stored all the database to start this application.
-You may find the crawler from my (Golang LeetCode Fetcher repo)[https://github.com/WeeHong/leetcode-question-fetcher]
+You may find the crawler from my [Golang LeetCode Fetcher repo](https://github.com/WeeHong/leetcode-question-fetcher)
 
 ## Getting Started
 1. Create a dotnet user secret
