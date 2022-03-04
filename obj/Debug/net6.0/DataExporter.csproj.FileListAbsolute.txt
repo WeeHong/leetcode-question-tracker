@@ -16,3 +16,13 @@
 /root/workspace/dotnet/DataExporter/bin/Debug/net6.0/Npgsql.dll
 /root/workspace/dotnet/DataExporter/obj/Debug/net6.0/DataExporter.csproj.CopyComplete
 /root/workspace/dotnet/DataExporter/bin/Debug/net6.0/CsvHelper.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/Newtonsoft.Json.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/Microsoft.Extensions.Configuration.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/Microsoft.Extensions.Configuration.Abstractions.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/Microsoft.Extensions.Configuration.FileExtensions.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/Microsoft.Extensions.Configuration.Json.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/Microsoft.Extensions.Configuration.UserSecrets.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/Microsoft.Extensions.FileProviders.Abstractions.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/Microsoft.Extensions.FileProviders.Physical.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/Microsoft.Extensions.FileSystemGlobbing.dll
+/root/workspace/dotnet/DataExporter/bin/Debug/net6.0/Microsoft.Extensions.Primitives.dll
