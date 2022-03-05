@@ -37,7 +37,7 @@ public class Program
 
         if (totalDbRecord != totalNotionRecord)
         {
-            var record = await database.SelectQuestions(totalDbRecord);
+            var record = await database.SelectQuestions(totalNotionRecord);
             var response = await notion.CreateNotionRecord(record);
 
             if (!response)
