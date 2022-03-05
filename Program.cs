@@ -30,6 +30,10 @@ public class Program
 
         log.Information("Calculating Notion record ...");
         var totalNotionRecord = await notion.CountTotalRecord();
+        
+        log.Information($"Database Record = {totalDbRecord} ...");
+        log.Information($"Notion Record = {totalNotionRecord} ...");
+
 
         if (totalDbRecord != totalNotionRecord)
         {
