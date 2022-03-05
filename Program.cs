@@ -1,40 +1,54 @@
 ﻿using DataExporter.Core;
-using DataExporter.Models.Todoist;
-using Newtonsoft.Json;
+using Serilog;
 
 public class Program
 {
     public static async Task Main(string[] args)
     {
+        var log = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .WriteTo.File("logs/leetcode-tracker.txt", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
         var notion = new Notion();
         var todoist = new Todoist();
         var database = new Database();
         var csv = new Export();
 
-        // if (!notion.IsDatabaseExists())
-        // {
-        //     Console.WriteLine("Failed to find Notion database");
-        //     return;
-        // }
+        log.Information("LeetCode Question Tracker service started.");
 
-        // await database.OpenConnection();
+        if (!notion.IsDatabaseExists())
+        {
+            log.Error("Failed to find Notion database");
+            return;
+        }
 
-        // var total = await database.CompareTotalQuestions();
-        // var record = await database.SelectQuestions(total);
-        // var response = await notion.CreateNotionRecord(record);
+        await database.OpenConnection();
 
-        // if (!response)
-        // {
-        //     Console.WriteLine("Failed to insert data");
-        //     return;
-        // }
+        var totalDbRecord = await database.CompareTotalQuestions();
+        var totalNotionRecord = await notion.CountTotalRecord();
 
-        // Console.WriteLine("Data insert successfully");
+        if (totalDbRecord == totalNotionRecord)
+        {
+            var record = await database.SelectQuestions(totalDbRecord);
+            var response = await notion.CreateNotionRecord(record);
 
-        // await database.CloseConnection();
+            if (!response)
+            {
+                log.Error("Failed to insert data");
+                return;
+            }
 
-        var tasks = await todoist.GetAllTasks();
-        var toReviseTask = await notion.FetchToReviseRecord();
-        await todoist.CreateTask(toReviseTask);
+            Console.WriteLine("Data insert successfully");
+
+            await database.CloseConnection();
+
+            var tasks = await todoist.GetAllTasks();
+            var toReviseTask = await notion.FetchToReviseRecord();
+            await todoist.CreateTask(toReviseTask);
+        }
+
+        log.Information("LeetCode Question Tracker service ended.");
     }
 }

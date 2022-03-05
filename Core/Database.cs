@@ -23,7 +23,6 @@ public class Database
         }
 
         result.Close();
-
         return totalRecords;
     }
 

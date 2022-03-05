@@ -14,7 +14,7 @@ public partial class FilterResponse
     public List<Result> Results { get; set; } = new();
 
     [JsonProperty(PropertyName = "next_cursor")]
-    public object? NextCursor { get; set; }
+    public string? NextCursor { get; set; }
 
     [JsonProperty(PropertyName = "has_more")]
     public bool HasMore { get; set; }

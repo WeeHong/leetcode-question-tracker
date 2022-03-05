@@ -3,7 +3,7 @@ This application helps user who practices LeetCode to keep track of their study 
 
 When user mark their questions as **"To Revise"**, then the application will create a reminder as a task on Todoist.
 
-The best use of this application is to create a task scheduler and run it automatically.
+*PS: The best use of this application is to create a task scheduler and run it automatically.*
 
 ## Feature
 - Export LeetCode questions to CSV
@@ -11,8 +11,8 @@ The best use of this application is to create a task scheduler and run it automa
 - Create a revise reminder on Todoist
 
 ## Pre-requisite
-You need to have a local database which stored all the database to start this application.<br/>
-You may find the crawler from my [Golang LeetCode Fetcher repo](https://github.com/WeeHong/leetcode-question-fetcher)
+You need to have a local database which has all the LeetCode question inside before starting this application.<br/>
+You may find the API at here, [Golang LeetCode Fetcher repo](https://github.com/WeeHong/leetcode-question-fetcher)
 
 ## Getting Started
 1. Create a dotnet user secret
