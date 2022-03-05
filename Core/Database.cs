@@ -12,7 +12,8 @@ public class Database
 
     public async Task<int> CompareTotalQuestions()
     {
-        var cmd = new NpgsqlCommand("SELECT total FROM records ORDER BY created_at DESC FETCH FIRST ROW ONLY;", _connection);
+        // var cmd = new NpgsqlCommand("SELECT total FROM records ORDER BY created_at DESC FETCH FIRST ROW ONLY;", _connection);
+        var cmd = new NpgsqlCommand("SELECT total FROM records ORDER BY created_at LIMIT 1;", _connection);
 
         var result = await cmd.ExecuteReaderAsync();
         var totalRecords = 0;

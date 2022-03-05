@@ -206,15 +206,11 @@ public class Notion
             var json = JsonConvert.SerializeObject(filter);
             var payload = new StringContent(json, Encoding.UTF8, "application/json");
             var response = httpClient.PostAsync(filterUri, payload).Result;
-
-            Console.WriteLine(json);
-
             var resultToString = await response.Content.ReadAsStringAsync();
 
             filterResponse = JsonConvert.DeserializeObject<FilterResponse>(resultToString)!;
             total += filterResponse!.Results == null ? 0 : filterResponse.Results.Count();
             startCursor = filterResponse.NextCursor;
-            Console.WriteLine(filterResponse.Results!.Count());
         } while (filterResponse.NextCursor != null);
 
         return total;

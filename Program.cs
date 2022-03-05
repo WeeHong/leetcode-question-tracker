@@ -20,27 +20,29 @@ public class Program
 
         if (!notion.IsDatabaseExists())
         {
-            log.Error("Failed to find Notion database");
+            log.Error("Failed to find Notion database.");
             return;
         }
 
         await database.OpenConnection();
 
         var totalDbRecord = await database.CompareTotalQuestions();
+
+        log.Information("Calculating Notion record ...");
         var totalNotionRecord = await notion.CountTotalRecord();
 
-        if (totalDbRecord == totalNotionRecord)
+        if (totalDbRecord != totalNotionRecord)
         {
             var record = await database.SelectQuestions(totalDbRecord);
             var response = await notion.CreateNotionRecord(record);
 
             if (!response)
             {
-                log.Error("Failed to insert data");
+                log.Error("Failed to insert data.");
                 return;
             }
 
-            Console.WriteLine("Data insert successfully");
+            log.Information("Data insert successfully.");
 
             await database.CloseConnection();
 
