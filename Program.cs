@@ -5,14 +5,22 @@ public class Program
 {
     public static async Task Main(string[] args)
     {
+        var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         var log = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
             .WriteTo.File("logs/leetcode-tracker.txt", rollingInterval: RollingInterval.Day)
             .CreateLogger();
 
-        var notion = new Notion();
-        var todoist = new Todoist();
+
+        if (environment == null)
+        {
+            log.Error(".NET Core environment cannot be determined.");
+            return;
+        }
+
+        var notion = new Notion(environment);
+        var todoist = new Todoist(environment);
         var database = new Database();
         var csv = new Export();
 
@@ -30,7 +38,7 @@ public class Program
 
         log.Information("Calculating Notion record ...");
         var totalNotionRecord = await notion.CountTotalRecord();
-        
+
         log.Information($"Database Record = {totalDbRecord} ...");
         log.Information($"Notion Record = {totalNotionRecord} ...");
 
@@ -49,11 +57,15 @@ public class Program
             log.Information("Data insert successfully.");
 
             await database.CloseConnection();
-
-            var tasks = await todoist.GetAllTasks();
-            var toReviseTask = await notion.FetchToReviseRecord();
-            await todoist.CreateTask(toReviseTask);
         }
+
+
+        var tasks = await todoist.GetAllTasks();
+        var toReviseTask = await notion.FetchToReviseRecord();
+
+        log.Information("Creating Todoist Task ...");
+        await todoist.CreateTask(toReviseTask);
+        log.Information("Todoist Task created successfully.");
 
         log.Information("LeetCode Question Tracker service ended.");
     }

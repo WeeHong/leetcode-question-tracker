@@ -51,6 +51,9 @@ public partial class Args
 
     [JsonProperty(PropertyName = "item_id", NullValueHandling = NullValueHandling.Ignore)]
     public string? ItemId { get; set; }
+
+    [JsonProperty(PropertyName = "labels", NullValueHandling = NullValueHandling.Ignore)]
+    public List<string>? Labels { get; set; }
 }
 
 public partial class Due

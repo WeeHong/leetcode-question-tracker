@@ -8,16 +8,23 @@ public class Todoist
 {
     private readonly IConfiguration _configuration;
     private readonly string _token;
-
     private static HttpClient httpClient = new HttpClient();
     private static List<string> lookup = new();
 
-    public Todoist()
+    public Todoist(string environment)
     {
-        _configuration = new ConfigurationBuilder()
-                    .AddUserSecrets<Program>()
-                    .Build();
-        _token = _configuration["TodoistToken"];
+        if (environment == "development")
+        {
+            _configuration = new ConfigurationBuilder()
+                        .AddUserSecrets<Program>()
+                        .Build();
+            _token = _configuration["TodoistToken"];
+        }
+        else
+        {
+            var environmentVariable = Environment.GetEnvironmentVariable("LeetCodeEnvironmentVariable")!.Split(";");
+            _token = environmentVariable[3];
+        }
 
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
@@ -65,7 +72,8 @@ public class Todoist
                     },
                     DateAdded = DateTime.UtcNow.ToString("yyyy-MM-dd"),
                     Description = task.Id,
-                    Priority = 1
+                    Priority = 1,
+                    Labels = new() { "2160009285" }
                 };
 
                 var commands = new List<Command> {

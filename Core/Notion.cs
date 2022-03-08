@@ -17,14 +17,24 @@ public class Notion
 
     private static HttpClient httpClient = new HttpClient();
 
-    public Notion()
+    public Notion(string environment)
     {
-        _configuration = new ConfigurationBuilder()
-            .AddUserSecrets<Program>()
-            .Build();
-        _database = _configuration["NotionDatabase"];
-        _version = _configuration["NotionVersion"];
-        _token = _configuration["NotionToken"];
+        if (environment == "development")
+        {
+            _configuration = new ConfigurationBuilder()
+                .AddUserSecrets<Program>()
+                .Build();
+            _database = _configuration["NotionDatabase"];
+            _version = _configuration["NotionVersion"];
+            _token = _configuration["NotionToken"];
+        }
+        else
+        {
+            var environmentVariable = Environment.GetEnvironmentVariable("LeetCodeEnvironmentVariable")!.Split(";");
+            _database = environmentVariable[0];
+            _version = environmentVariable[1];
+            _token = environmentVariable[2];
+        }
 
         httpClient.DefaultRequestHeaders.Add("Notion-Version", _version);
         httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
