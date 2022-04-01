@@ -61,7 +61,7 @@ public class Todoist
                 var arguments = new Args()
                 {
                     Id = "practice-leetcode",
-                    Content = $"[{task.Properties.Name.Title[0].Text.Content}]({task.Url})",
+                    Content = $"[{task.Properties.Name.Title[0].Text.Content}]({task.Properties.Name.Title[0].Href})",
                     Due = new Due()
                     {
                         Lang = "en",
