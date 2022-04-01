@@ -3,10 +3,11 @@ using System.Text;
 using DataExporter.Models.Todoist;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using Serilog;
 
 public class Todoist
 {
-    private readonly IConfiguration _configuration;
+    private readonly IConfiguration? _configuration;
     private readonly string _token;
     private static HttpClient httpClient = new HttpClient();
     private static List<string> lookup = new();
@@ -54,6 +55,14 @@ public class Todoist
 
     public async Task CreateTask(IList<Result> tasks)
     {
+        var log = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .WriteTo.Console()
+            .WriteTo.File("logs/leetcode-tracker.txt", rollingInterval: RollingInterval.Day)
+            .CreateLogger();
+
+        log.Information("Creating task ...");
+            
         foreach (var task in tasks)
         {
             if (!lookup.Contains(task.Id))
@@ -95,7 +104,7 @@ public class Todoist
                                 Lang = "en",
                                 IsRecurring = false,
                                 String = "Today at 20:00",
-                                Date = DateTimeOffset.UtcNow.AddDays(3).ToString("yyyy-MM-dd") + "T08:00:00",
+                                Date = DateTimeOffset.UtcNow.AddDays(5).ToString("yyyy-MM-dd") + "T08:00:00",
                                 Timezone = "Asia/Singapore"
                             }
                         }

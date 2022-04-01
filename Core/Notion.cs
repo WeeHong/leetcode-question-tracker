@@ -10,7 +10,7 @@ namespace DataExporter.Core;
 
 public class Notion
 {
-    private readonly IConfiguration _configuration;
+    private readonly IConfiguration? _configuration;
     private readonly string _database;
     private readonly string _version;
     private readonly string _token;
@@ -146,7 +146,6 @@ public class Notion
             if (!isSuccess)
                 break;
 
-            Console.WriteLine($"Question #{reader.GetInt32(0)} insert succesfully.");
         }
         return await Task.FromResult(isSuccess);
     }

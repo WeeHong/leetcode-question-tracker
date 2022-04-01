@@ -39,8 +39,8 @@ public class Program
         log.Information("Calculating Notion record ...");
         var totalNotionRecord = await notion.CountTotalRecord();
 
-        log.Information($"Database Record = {totalDbRecord} ...");
-        log.Information($"Notion Record = {totalNotionRecord} ...");
+        log.Information($"Database record = {totalDbRecord} ...");
+        log.Information($"Notion record = {totalNotionRecord} ...");
 
 
         if (totalDbRecord != totalNotionRecord)
@@ -63,9 +63,9 @@ public class Program
         var tasks = await todoist.GetAllTasks();
         var toReviseTask = await notion.FetchToReviseRecord();
 
-        log.Information("Creating Todoist Task ...");
+        log.Information("Creating Todoist task ...");
         await todoist.CreateTask(toReviseTask);
-        log.Information("Todoist Task created successfully.");
+        log.Information("Todoist task created successfully.");
 
         log.Information("LeetCode Question Tracker service ended.");
     }
