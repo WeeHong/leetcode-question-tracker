@@ -62,15 +62,24 @@ public class Todoist
             .CreateLogger();
 
         log.Information("Creating task ...");
-            
+
         foreach (var task in tasks)
         {
+            var url = task.Properties.Name.Title[0].Href;
+            var urls = url!.Split('/');
+
+            urls[2] = "leetcode-cn.com";
+            var chinese = string.Join("/", urls);
+
+            urls[2] = "leetcode.com";
+            var english = string.Join("/", urls);
+
             if (!lookup.Contains(task.Id))
             {
                 var arguments = new Args()
                 {
                     Id = "practice-leetcode",
-                    Content = $"[{task.Properties.Name.Title[0].Text.Content}]({task.Properties.Name.Title[0].Href})",
+                    Content = $"{task.Properties.Name.Title[0].Text.Content} [CN]({chinese})[EN]({english})",
                     Due = new Due()
                     {
                         Lang = "en",
