@@ -79,7 +79,7 @@ public class Todoist
                 var arguments = new Args()
                 {
                     Id = "practice-leetcode",
-                    Content = $"{task.Properties.Name.Title[0].Text.Content} [CN]({chinese})[EN]({english})",
+                    Content = $"{task.Properties.Name.Title[0].Text.Content} - [CN]({chinese}) [EN]({english})",
                     Due = new Due()
                     {
                         Lang = "en",
