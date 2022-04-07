@@ -79,13 +79,13 @@ public class Todoist
                 var arguments = new Args()
                 {
                     Id = "practice-leetcode",
-                    Content = $"{task.Properties.Name.Title[0].Text.Content} - [CN]({chinese}) [EN]({english})",
+                    Content = $"[[CN]({chinese})] [[EN]({english})] - {task.Properties.Name.Title[0].Text.Content}",
                     Due = new Due()
                     {
                         Lang = "en",
                         IsRecurring = false,
                         String = "Every day",
-                        Date = DateTime.UtcNow.AddDays(3).ToString("yyyy-MM-dd"),
+                        Date = DateTime.UtcNow.AddDays(5).ToString("yyyy-MM-dd"),
                         Timezone = "Asia/Singapore"
                     },
                     DateAdded = DateTime.UtcNow.ToString("yyyy-MM-dd"),
