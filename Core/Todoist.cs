@@ -63,6 +63,7 @@ public class Todoist
 
         log.Information("Creating task ...");
 
+
         foreach (var task in tasks)
         {
             var url = task.Properties.Name.Title[0].Href;

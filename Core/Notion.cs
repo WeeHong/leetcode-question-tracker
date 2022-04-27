@@ -15,6 +15,7 @@ public class Notion
     private readonly string _version;
     private readonly string _token;
 
+    private static Dictionary<int, string> existQuestion = new Dictionary<int, string>();
     private static HttpClient httpClient = new HttpClient();
 
     public Notion(string environment)
@@ -54,98 +55,100 @@ public class Notion
         bool isSuccess = true;
         while (await reader.ReadAsync())
         {
-            List<TagOptions> tagOptions = new();
-            HashSet<string> uniqueTags = new();
-
-            var tags = reader.GetString(4).Split(",");
-            foreach (var tag in tags)
+            if (!existQuestion.ContainsKey(reader.GetInt32(0)))
             {
-                uniqueTags.Add(tag.Trim());
-            }
+                List<TagOptions> tagOptions = new();
+                HashSet<string> uniqueTags = new();
 
-            foreach (var tag in uniqueTags)
-            {
-                tagOptions.Add(new TagOptions()
+                var tags = reader.GetString(4).Split(",");
+                foreach (var tag in tags)
                 {
-                    Name = tag
-                });
-            }
+                    uniqueTags.Add(tag.Trim());
+                }
 
-            List<Title> titles = new();
-            titles.Add(new Title()
-            {
-                Type = "text",
-                Text = new Text()
+                foreach (var tag in uniqueTags)
                 {
-                    Content = reader.GetString(1),
-                    Link = new Link()
+                    tagOptions.Add(new TagOptions()
                     {
-                        Url = new Uri($"https://leetcode.com/problems/{reader.GetString(2)}")
-                    }
-                },
-                Annotations = new Annotations
-                {
-                    Bold = false,
-                    Italic = false,
-                    Strikethrough = false,
-                    Underline = false,
-                    Code = false,
-                    Color = "default"
-                },
-                PlainText = reader.GetString(1),
-                Href = $"https://leetcode.com/problems/{reader.GetString(2)}",
-            });
+                        Name = tag
+                    });
+                }
 
-            var pageData = new Page()
-            {
-                Parent = new Parent()
+                List<Title> titles = new();
+                titles.Add(new Title()
                 {
-                    DatabaseId = _database
-                },
-                Properties = new Properties()
-                {
-                    Tag = new Tag()
+                    Type = "text",
+                    Text = new Text()
                     {
-                        Type = "multi_select",
-                        MultiSelect = tagOptions
-                    },
-                    Difficulty = new Difficulty()
-                    {
-                        Type = "select",
-                        Select = new DifficultyOptions
+                        Content = reader.GetString(1),
+                        Link = new Link()
                         {
-                            Name = reader.GetString(3)
+                            Url = new Uri($"https://leetcode.com/problems/{reader.GetString(2)}")
                         }
                     },
-                    Progress = new Progress()
+                    Annotations = new Annotations
                     {
-                        Type = "select",
-                        Select = null
+                        Bold = false,
+                        Italic = false,
+                        Strikethrough = false,
+                        Underline = false,
+                        Code = false,
+                        Color = "default"
                     },
-                    No = new No()
+                    PlainText = reader.GetString(1),
+                    Href = $"https://leetcode.com/problems/{reader.GetString(2)}",
+                });
+
+                var pageData = new Page()
+                {
+                    Parent = new Parent()
                     {
-                        Type = "number",
-                        Number = reader.GetInt32(0),
+                        DatabaseId = _database
                     },
-                    Name = new Name()
+                    Properties = new Properties()
                     {
-                        Id = "title",
-                        Type = "title",
-                        Title = titles
+                        Tag = new Tag()
+                        {
+                            Type = "multi_select",
+                            MultiSelect = tagOptions
+                        },
+                        Difficulty = new Difficulty()
+                        {
+                            Type = "select",
+                            Select = new DifficultyOptions
+                            {
+                                Name = reader.GetString(3)
+                            }
+                        },
+                        Progress = new Progress()
+                        {
+                            Type = "select",
+                            Select = null
+                        },
+                        No = new No()
+                        {
+                            Type = "number",
+                            Number = reader.GetInt32(0),
+                        },
+                        Name = new Name()
+                        {
+                            Id = "title",
+                            Type = "title",
+                            Title = titles
+                        }
                     }
-                }
-            };
+                };
 
-            var createPageUri = new Uri("https://api.notion.com/v1/pages");
-            var json = JsonConvert.SerializeObject(pageData);
-            var payload = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = httpClient.PostAsync(createPageUri, payload);
+                var createPageUri = new Uri("https://api.notion.com/v1/pages");
+                var json = JsonConvert.SerializeObject(pageData);
+                var payload = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = httpClient.PostAsync(createPageUri, payload);
 
-            isSuccess = response.Result.IsSuccessStatusCode;
+                isSuccess = response.Result.IsSuccessStatusCode;
 
-            if (!isSuccess)
-                break;
-
+                if (!isSuccess)
+                    break;
+            }
         }
         return await Task.FromResult(isSuccess);
     }
@@ -219,6 +222,20 @@ public class Notion
 
             filterResponse = JsonConvert.DeserializeObject<FilterResponse>(resultToString)!;
             total += filterResponse!.Results == null ? 0 : filterResponse.Results.Count();
+
+            if (filterResponse!.Results != null)
+            {
+                foreach (var questions in filterResponse.Results)
+                {
+                    var questionNo = questions.Properties.No.Number;
+                    var questionTitle = questions.Properties.Name.Title[0].Text.Content;
+                    if (!existQuestion.ContainsKey(questionNo))
+                    {
+                        existQuestion.Add(questionNo, questionTitle);
+                    }
+                }
+            }
+
             startCursor = filterResponse.NextCursor;
         } while (filterResponse.NextCursor != null);
 

@@ -43,21 +43,18 @@ public class Program
         log.Information($"Notion record = {totalNotionRecord} ...");
 
 
-        if (totalDbRecord != totalNotionRecord)
+        var record = await database.SelectQuestions(totalNotionRecord);
+        var response = await notion.CreateNotionRecord(record);
+
+        if (!response)
         {
-            var record = await database.SelectQuestions(totalNotionRecord);
-            var response = await notion.CreateNotionRecord(record);
-
-            if (!response)
-            {
-                log.Error("Failed to insert data.");
-                return;
-            }
-
-            log.Information("Data insert successfully.");
-
-            await database.CloseConnection();
+            log.Error("Failed to insert data.");
+            return;
         }
+
+        log.Information("Data insert successfully.");
+
+        await database.CloseConnection();
 
 
         var tasks = await todoist.GetAllTasks();
