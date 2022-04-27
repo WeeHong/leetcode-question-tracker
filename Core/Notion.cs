@@ -5,6 +5,7 @@ using DataExporter.Models.Todoist;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Npgsql;
+using Serilog;
 
 namespace DataExporter.Core;
 
@@ -52,11 +53,18 @@ public class Notion
 
     public async Task<bool> CreateNotionRecord(NpgsqlDataReader reader)
     {
+        var log = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("/temp/logs/leetcode-tracker.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
         bool isSuccess = true;
         while (await reader.ReadAsync())
         {
             if (!existQuestion.ContainsKey(reader.GetInt32(0)))
             {
+                log.Information("Adding new question " + reader.GetInt32(0) + " : " + reader.GetString(1));
                 List<TagOptions> tagOptions = new();
                 HashSet<string> uniqueTags = new();
 
@@ -193,11 +201,10 @@ public class Notion
         return new();
     }
 
-    public async Task<Int32> CountTotalRecord()
+    public async Task RegisterRecord()
     {
         FilterResponse filterResponse = new();
         string? startCursor = null;
-        int total = 0;
 
         do
         {
@@ -221,7 +228,6 @@ public class Notion
             var resultToString = await response.Content.ReadAsStringAsync();
 
             filterResponse = JsonConvert.DeserializeObject<FilterResponse>(resultToString)!;
-            total += filterResponse!.Results == null ? 0 : filterResponse.Results.Count();
 
             if (filterResponse!.Results != null)
             {
@@ -231,14 +237,12 @@ public class Notion
                     var questionTitle = questions.Properties.Name.Title[0].Text.Content;
                     if (!existQuestion.ContainsKey(questionNo))
                     {
-                        existQuestion.Add(questionNo, questionTitle);
+                        existQuestion.Add(questionNo, questionTitle!);
                     }
                 }
             }
 
             startCursor = filterResponse.NextCursor;
         } while (filterResponse.NextCursor != null);
-
-        return total;
     }
 }

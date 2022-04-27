@@ -9,7 +9,7 @@ public class Program
         var log = new LoggerConfiguration()
             .MinimumLevel.Debug()
             .WriteTo.Console()
-            .WriteTo.File("logs/leetcode-tracker.txt", rollingInterval: RollingInterval.Day)
+            .WriteTo.File("/temp/logs/leetcode-tracker.txt", rollingInterval: RollingInterval.Day)
             .CreateLogger();
 
 
@@ -34,16 +34,10 @@ public class Program
 
         await database.OpenConnection();
 
-        var totalDbRecord = await database.CompareTotalQuestions();
+        log.Information("Calculating Notion record.");
+        await notion.RegisterRecord();
 
-        log.Information("Calculating Notion record ...");
-        var totalNotionRecord = await notion.CountTotalRecord();
-
-        log.Information($"Database record = {totalDbRecord} ...");
-        log.Information($"Notion record = {totalNotionRecord} ...");
-
-
-        var record = await database.SelectQuestions(totalNotionRecord);
+        var record = await database.fetchQuestions();
         var response = await notion.CreateNotionRecord(record);
 
         if (!response)
@@ -52,7 +46,7 @@ public class Program
             return;
         }
 
-        log.Information("Data insert successfully.");
+        log.Information("Question(s) insert successfully.");
 
         await database.CloseConnection();
 
@@ -60,7 +54,7 @@ public class Program
         var tasks = await todoist.GetAllTasks();
         var toReviseTask = await notion.FetchToReviseRecord();
 
-        log.Information("Creating Todoist task ...");
+        log.Information("Creating Todoist task.");
         await todoist.CreateTask(toReviseTask);
         log.Information("Todoist task created successfully.");
 
